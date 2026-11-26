@@ -22,6 +22,15 @@ enum class SoundCue {
 };
 
 namespace Helper {
+
+	// Console Capabilities, Color & Sound
+
+	void InitConsoleCapabilities();
+	void SetColorEnabled(bool enabled);
+	void SetSoundEnabled(bool enabled);
+	std::string Colorized(const std::string& text, ColorRole role);
+	void PlaySound(SoundCue cue);
+
 	// Console UI & Formatting
 	void ClearScreen();
 	void Pause(const std::string& message = "Press Enter to continue...");
@@ -78,12 +87,4 @@ namespace Helper {
 	bool VerifyPassword(const std::string& plainPassword, const std::string& storedHash);
 
 	std::string NowIsoTimestamp();
-
-	// Console extras
-
-	void InitConsoleCapabilities();
-	void SetColorEnabled(bool enabled);
-	void SetSoundEnabled(bool enabled);
-	std::string Colorized(const std::string& text, ColorRole role);
-	void PlaySound(SoundCue cue);
 }
