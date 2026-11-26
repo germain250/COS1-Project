@@ -45,7 +45,6 @@ Each week I will summarize my milestone activity and progress by writing a stand
 ### Week 1
 
 Replace this paragraph with your stand up for this week. Use the prompts above to summarize your most recent milestone activity and work.
-
 ### Week 2
 
 My next stand up will go here...
