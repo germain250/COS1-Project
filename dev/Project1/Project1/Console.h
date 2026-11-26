@@ -33,7 +33,7 @@ namespace Console {
 	bool IsSoundEnabled();
 
 	std::string Colorize(const std::string& text, ColorRole role);
-	void PlaySound(SoundCue cue);
+	void PlaySoundCue(SoundCue cue);
 
 	// Console UI & Formatting
 	void ClearScreen();
