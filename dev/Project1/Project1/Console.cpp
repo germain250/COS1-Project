@@ -124,7 +124,7 @@ namespace Console {
 		EnsureInitialized();
 
 		if (!colorEnabled || text.empty()) {
-			return std::string();
+			return text;
 		}
 
 		return std::string(AnsiCodeFor(role)) + text + "\x1b[0m";
@@ -158,5 +158,8 @@ namespace Console {
 #endif // _WIN32
 
 
+	}
+	void ClearScreen()
+	{
 	}
 }
