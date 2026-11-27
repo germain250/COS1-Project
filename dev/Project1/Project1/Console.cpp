@@ -159,7 +159,152 @@ namespace Console {
 
 
 	}
+
+
+	// Console UI & Formatting
+
 	void ClearScreen()
 	{
+		EnsureInitialized();
+
+#ifdef _WIN32
+		std::system("cls");
+#else
+		std::system("clear");
+#endif // _WIN32
+
+	}
+	void Pause(const std::string& message)
+	{
+		EnsureInitialized();
+
+		std::cout << "\n" << Colorize(message, ColorRole::Muted);
+		std::string any;
+		std::getline(std::cin, any);
+	}
+	void PrintDivider(char ch, int width)
+	{
+		EnsureInitialized();
+
+		std::string line(std::max(1,width), ch);
+
+		std::cout << Colorize(line, ColorRole::Muted);
+	}
+	void PrintHeader(const std::string& title, int width)
+	{
+		EnsureInitialized();
+
+		const int safeWidth = std::max(1, width);
+		const std::string border(safeWidth, '=');
+		std::cout << border << '\n';
+		std::cout << Colorize("  " + title, ColorRole::Brand) << '\n';
+		std::cout << border << '\n';
+	}
+	void PrintSuccess(const std::string& message)
+	{
+		EnsureInitialized();
+
+		std::cout << Colorize("[OK]", ColorRole::Success) << ' ' << message << '\n';
+
+		PlaySoundCue(SoundCue::Success);
+	}
+	void PrintError(const std::string& message)
+	{
+		EnsureInitialized();
+
+		std::cout << Colorize("[ERROR]", ColorRole::Error) << ' ' << message << '\n';
+
+		PlaySoundCue(SoundCue::Error);
+	}
+	void PrintWarning(const std::string& message)
+	{
+		EnsureInitialized();
+
+		std::cout << Colorize("[WARN]", ColorRole::Warning) << ' ' << message << '\n';
+
+		PlaySoundCue(SoundCue::Warning);
+	}
+	void PrintInfo(const std::string& message)
+	{
+		EnsureInitialized();
+
+		std::cout << Colorize("[INFO]", ColorRole::Info) << ' ' << message << '\n';
+	}
+	void PrintTable(const std::vector<std::string>& headers, const std::vector<std::vector<std::string>>& rows)
+	{
+		if (headers.empty()) return;
+
+		const size_t col = headers.size();
+		std::vector<size_t> widths(col, 0);
+
+		// store the length of each word in the headers vector as the width in widths
+		for (size_t c = 0; c < col; c++) {
+			widths[c] = headers[c].size();
+		}
+
+		for (const auto& row : rows) {
+			for (size_t c = 0; c < std::max(col, row.size()); c++) {
+				// have the previously saved widths from the size of column names overwritten by 
+				// whatever is longer between themselves or the length of the current cell in iteration
+				widths[c] = std::max(widths[c], row[c].size());
+			}
+		}
+		// A lambda that dynamically print the separater based on the size of the current the table
+		auto PrintSeparator = [&]() {
+			std::ostringstream sep;
+			sep << '+';
+			for (size_t w : widths) {
+				sep << std::string(w + 2, '-') << '+';
+			}
+			std::cout << Colorize(sep.str(), ColorRole::Muted) << '\n';
+		};
+
+		PrintSeparator();
+
+		std::cout << Colorize("|", ColorRole::Muted);
+
+		// Print the table headers
+		for (size_t c = 0; c < col; c++) {
+			std::ostringstream cellStream;
+
+			cellStream << ' ' << std::left << std::setw(widths[c]) << headers[c] << ' ';
+
+			std::cout << Colorize(cellStream.str(), ColorRole::Brand) << Colorize("|", ColorRole::Muted);
+
+		}
+
+		std::cout << '\n';
+		PrintSeparator();
+
+		// Handle empty state (When the table contains no data)
+		if (rows.empty()) {
+			size_t totalWidth = 0;
+			for (size_t width : widths) {
+				totalWidth += width + 3;
+			}
+
+			if (totalWidth > 1) totalWidth -= 1;
+
+			std::ostringstream emptyRow;
+
+			emptyRow << "|" << std::left << std::setw(totalWidth) << " (No records found)" << '|';
+
+			std::cout << Colorize(emptyRow.str(), ColorRole::Muted) << '\n';
+
+			PrintSeparator();
+			return;
+		}
+
+		// Print the table body
+		for (const auto& row : rows) {
+			std::cout << Colorize("|", ColorRole::Muted);
+			for (size_t c = 0; c < col;c++) {
+				const std::string cell = (c < row.size()) ? row[c] : "";
+				std::cout << ' ' << std::left << std::setw(widths[c]) << cell << ' ' << Colorize("|", ColorRole::Muted);
+			}
+
+			std::cout << '\n';
+		}
+		PrintSeparator();
 	}
 }
