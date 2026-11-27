@@ -307,4 +307,8 @@ namespace Console {
 		}
 		PrintSeparator();
 	}
+	std::string PromptText(const std::string& label, bool required, std::size_t minLen, std::size_t maxLen)
+	{
+		return std::string();
+	}
 }
