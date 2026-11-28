@@ -166,24 +166,18 @@ namespace Helper {
 		return oss.str() == storedHash;
 	}
 
-	std::string NowIsoTimestamp()
-	{
+	std::string NowIsoTimestamp() {
 		const auto now = std::chrono::system_clock::now();
-
 		const std::time_t t = std::chrono::system_clock::to_time_t(now);
-		std::tm utcTime{};
-
+		std::tm utcTm{};
 #ifdef _WIN32
-		gmtime_s(&utcTime, &t);
+		gmtime_s(&utcTm, &t);
 #else
-		gmtime_r(&t, &utcTime)
-#endif // _WIN32
-
+		gmtime_r(&t, &utcTm);
+#endif
 		std::ostringstream oss;
-		oss << std::put_time(&utcTime, "%Y-%m-%dT%H:%M:%SZ");
+		oss << std::put_time(&utcTm, "%Y-%m-%dT%H:%M:%SZ");
 		return oss.str();
-
-		return std::string();
 	}
 
 
