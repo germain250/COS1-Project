@@ -9,8 +9,7 @@ namespace Helper {
 	std::string FormatCurrency(long long cents);
 	std::vector<long long> SplitCentsEqually(long long totalCents, std::size_t count);
 
-	std::string Trim(std::string& str);
-	std::string NormalizeUsername(const std::string& username);
+	std::string Trim(const std::string& str);
 
 	std::string GenerateID(const std::string& prefix);
 	std::string HashPassword(const std::string& plainPassword);
