@@ -62,10 +62,11 @@ namespace Console {
 	std::string PromptPassword(
 		const std::string& label,
 		std::size_t minLen = 6,
-		std::size_t maxLen = 24
+		std::size_t maxLen = 24,
+		bool validate = true
 	);
 
-	int PromptInt(const std::string& label, int minVal, int maxVal);
+	int PromptInt(const std::string& label, int minVal = INT_MIN, int maxVal = INT_MAX, bool validate = false);
 
 	long long PromptMoneyCents(
 		const std::string& label,
